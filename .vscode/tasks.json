@@ -1,0 +1,39 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "builddebug",
+            "command": "make",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Builds our program using the existing Makefile"
+        },
+		{
+            "type": "cppbuild",
+            "label": "buildrelease",
+            "command": "make",
+            "args": ["debugrelease"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "detail": "Builds our program using the existing Makefile"
+        }
+    ],
+    "version": "2.0.0"
+}

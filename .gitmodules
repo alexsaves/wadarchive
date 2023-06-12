@@ -1,0 +1,8 @@
+[submodule "include/json"]
+	path = include/json
+	url = https://github.com/nlohmann/json.git
+	branch = master
+[submodule "include/cargs"]
+	path = include/cargs
+	url = https://github.com/likle/cargs.git
+	branch = master
