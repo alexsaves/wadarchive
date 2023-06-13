@@ -127,5 +127,37 @@ namespace wadarchive
 			std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
 			return in.tellg();
 		}
+
+		/// @brief Read all bytes from a file
+		/// @param filename The file to read
+		/// @param read How many bytes were read
+		/// @return The data
+		char *read_file(char *filename, int *read)
+		{
+			ifstream ifs(filename, ios::binary | ios::ate);
+			ifstream::pos_type pos = ifs.tellg();
+			int length = pos;
+			char *pChars = new char[length];
+			ifs.seekg(0, ios::beg);
+			ifs.read(pChars, length);
+			ifs.close();
+			*read = length;
+			return pChars;
+		}
+
+		/// @brief Read a range of bytes from a file
+		/// @param filename The file to read
+		/// @param start The byte position to start at
+		/// @param stride How many bytes to read
+		/// @return The data
+		char *read_file_range(char *filename, int start, int stride)
+		{
+			ifstream ifs(filename, ios::binary | ios::ate);
+			char *pChars = new char[stride];
+			ifs.seekg(start);
+			ifs.read(pChars, stride);
+			ifs.close();
+			return pChars;
+		}
 	}
 }

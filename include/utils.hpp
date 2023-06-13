@@ -55,6 +55,19 @@ namespace wadarchive
 		/// @param num The number to format
 		/// @return A nicely formatted string
 		string get_int_string(int num);
+
+		/// @brief Read all bytes from a file
+		/// @param filename The file to read
+		/// @param read How many bytes were read
+		/// @return The data
+		char *read_file(char *filename, int *read);
+
+		/// @brief Read a range of bytes from a file
+		/// @param filename The file to read
+		/// @param start The byte position to start at
+		/// @param stride How many bytes to read
+		/// @return The data
+		char *read_file_range(char *filename, int start, int stride);
 	}
 }
 

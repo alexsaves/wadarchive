@@ -30,7 +30,7 @@ namespace wadarchive
 		}
 
 		string str = string(ENGINE_NAME) + "[" + utils::get_double_as_string(ENGINE_VERSION, 2) + "]";
-		const int bufferSize = 30;
+		const int bufferSize = FRONT_BUFFER_LENGTH;
 		char buffer[bufferSize];
 		char fillChar = ' ';
 		std::fill_n(buffer, bufferSize, fillChar);
@@ -95,7 +95,7 @@ namespace wadarchive
 
 		// Dump the json location to a buffer
 		string jsonlocationstr = utils::get_int_string(jsonlocation);
-		const int locbuffersize = 30;
+		const int locbuffersize = SUFFIX_BUFFER_LENGTH;
 		char locbuffer[locbuffersize];
 		char fillChar = ' ';
 		std::fill_n(locbuffer, locbuffersize, fillChar);
@@ -141,6 +141,12 @@ namespace wadarchive
 	WadArchiveReader::WadArchiveReader(string source_wad_file)
 	{
 		file_location = source_wad_file;
+
+		// Get file length
+		int file_length = utils::filesize(file_location);
+
+		char * jsonposstrchar = utils::read_file_range(file_location.c_str(), file_length - SUFFIX_BUFFER_LENGTH, SUFFIX_BUFFER_LENGTH);
+
 	}
 
 	/// @brief Destroy the reader
