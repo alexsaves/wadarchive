@@ -159,5 +159,18 @@ namespace wadarchive
 			ifs.close();
 			return pChars;
 		}
+
+		/// @brief Write a fixed length string using a shorter input string
+		/// @param srcstr The shorter input string
+		/// @param length How long to make the fixed length string
+		/// @param fillchar What character to fill the remainder of the string with
+		/// @return The resulting fixed length string
+		char *write_fixed_length_string(string srcstr, int length, char fillchar) {
+			char *buffer = new char[length];
+			std::fill_n(buffer, length, fillchar);
+
+			std::copy(srcstr.begin(), srcstr.end(), buffer);
+			return buffer;
+		}
 	}
 }

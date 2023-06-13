@@ -116,6 +116,10 @@ int main(int argc, char *argv[])
 
 		WadArchiveReader reader(source_glob);
 
+		if (!reader.init()) {
+			cout << "Error: not a valid archive." << endl;
+		}
+
 		reader.close();
 
 		return EXIT_SUCCESS;

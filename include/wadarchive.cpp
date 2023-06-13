@@ -21,6 +21,7 @@ namespace wadarchive
 	WadArchiveWriter::WadArchiveWriter(string destination_file)
 	{
 		file_location = destination_file;
+		format_version = ENGINE_VERSION;
 
 		// Check if the file exists
 		if (utils::file_exists(file_location))
@@ -28,23 +29,18 @@ namespace wadarchive
 			// delete the file
 			remove(file_location.c_str());
 		}
-
-		string str = string(ENGINE_NAME) + "[" + utils::get_double_as_string(ENGINE_VERSION, 2) + "]";
-		const int bufferSize = FRONT_BUFFER_LENGTH;
-		char buffer[bufferSize];
-		char fillChar = ' ';
-		std::fill_n(buffer, bufferSize, fillChar);
-
-		std::copy(str.begin(), str.end(), buffer);
-
-		// Create an empty file
-		// Open the file in binary mode
 		std::ofstream file(file_location, std::ios::binary);
 
 		if (file.is_open())
 		{
 			// Write the character array to the file
-			file.write(buffer, bufferSize);
+			char *sigbuffer = utils::write_fixed_length_string(ENGINE_NAME, FRONT_BUFFER_LENGTH, ' ');
+			file.write(sigbuffer, FRONT_BUFFER_LENGTH);
+			free(sigbuffer);
+
+			char *sigverbuffer = utils::write_fixed_length_string(utils::get_double_as_string(ENGINE_VERSION, 2), FRONT_BUFFER_LENGTH, ' ');
+			file.write(sigverbuffer, FRONT_BUFFER_LENGTH);
+			free(sigverbuffer);
 
 			// Close the file
 			file.close();
@@ -141,12 +137,60 @@ namespace wadarchive
 	WadArchiveReader::WadArchiveReader(string source_wad_file)
 	{
 		file_location = source_wad_file;
+		format_version = ENGINE_VERSION;
+	}
 
+	/// @brief Initialize the reader with the file
+	/// @return Whether or not it was successful
+	bool WadArchiveReader::init()
+	{
 		// Get file length
 		int file_length = utils::filesize(file_location);
 
-		char * jsonposstrchar = utils::read_file_range(file_location.c_str(), file_length - SUFFIX_BUFFER_LENGTH, SUFFIX_BUFFER_LENGTH);
+		// Read the file signature
+		char *sigstrchar = utils::read_file_range((char *)file_location.c_str(), 0, FRONT_BUFFER_LENGTH);
+		string sigstrc = string(sigstrchar);
+		free(sigstrchar);
 
+		if (!sigstrc.starts_with(ENGINE_NAME))
+		{
+			// Fails sig check
+			return false;
+		}
+
+		char *verstrchar = utils::read_file_range((char *)file_location.c_str(), FRONT_BUFFER_LENGTH, FRONT_BUFFER_LENGTH);
+		string verstrc = string(verstrchar);
+		free(verstrchar);
+		format_version = stof(verstrc);
+
+		if (format_version < MIN_READABLE_ENGINE_VERSION)
+		{
+			// Fails sig check
+			return false;
+		}
+
+		// Read the footer and JSON data
+		char *jsonposstrchar = utils::read_file_range((char *)file_location.c_str(), file_length - SUFFIX_BUFFER_LENGTH, SUFFIX_BUFFER_LENGTH);
+		int jsonpos = stoi(string(jsonposstrchar));
+		free(jsonposstrchar);
+		char *jsonchardata = utils::read_file_range((char *)file_location.c_str(), jsonpos, file_length - SUFFIX_BUFFER_LENGTH - jsonpos);
+		json filedata = json::parse(jsonchardata);
+		free(jsonchardata);
+
+		// iterate over the entries
+		if (filedata["engine"] != ENGINE_NAME)
+		{
+			return false;
+		}
+		if (filedata["engine_ver"] < MIN_READABLE_ENGINE_VERSION)
+		{
+			return false;
+		}
+		json entrydata = filedata["entries"];
+		for (json::iterator it = entrydata.begin(); it != entrydata.end(); ++it)
+		{
+			std::cout << *it << '\n';
+		}
 	}
 
 	/// @brief Destroy the reader

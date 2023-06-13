@@ -9,21 +9,21 @@ using namespace std;
 
 namespace wadarchive
 {
-    /// @brief Writes a wad archive
-    class WadArchiveWriter
-    {
-    public:
-        /// @brief Create a wad writer with a specific file
-        /// @param destination_file The location of the file
-        WadArchiveWriter(string destination_file);
+	/// @brief Writes a wad archive
+	class WadArchiveWriter
+	{
+	public:
+		/// @brief Create a wad writer with a specific file
+		/// @param destination_file The location of the file
+		WadArchiveWriter(string destination_file);
 
 		/// @brief Destroy the writer
-        ~WadArchiveWriter();
+		~WadArchiveWriter();
 
 		/// @brief Add a new file entry to the wad
 		/// @param filename The name of the entry
 		/// @param data The data to be written
-		WadEntry * AddFile(string filename, char *data, int datalen);
+		WadEntry *AddFile(string filename, char *data, int datalen);
 
 		/// @brief Wrap up the file
 		void close();
@@ -31,26 +31,40 @@ namespace wadarchive
 		/// @brief The location of the file being written
 		string file_location;
 
+		/// @brief The version of the file format
+		float format_version;
+
 		/// @brief Holds the list of entries
 		vector<WadEntry *> entries;
-    };
+	};
 
 	/// @brief Reads a wad archive
 	class WadArchiveReader
-    {
+	{
 	public:
-        /// @brief Reads a wad archive from the file system
-        /// @param source_wad_file The location of the file
-        WadArchiveReader(string source_wad_file);
+		/// @brief Reads a wad archive from the file system
+		/// @param source_wad_file The location of the file
+		WadArchiveReader(string source_wad_file);
 
 		/// @brief Destroy the reader
-        ~WadArchiveReader();
+		~WadArchiveReader();
 
 		/// @brief Wrap up the reader
 		void close();
 
+		/// @brief Initialize the reader with the file
+		/// @return Whether or not it was successful
+		bool init();
+
 		/// @brief The location of the file being read
 		string file_location;
+
+		/// @brief The version of the file format
+		float format_version;
+
+	private:
+		/// @brief Holds the entry names
+		vector<string> entry_names;
 	};
 }
 

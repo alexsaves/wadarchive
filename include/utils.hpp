@@ -68,6 +68,13 @@ namespace wadarchive
 		/// @param stride How many bytes to read
 		/// @return The data
 		char *read_file_range(char *filename, int start, int stride);
+
+		/// @brief Write a fixed length string using a shorter input string
+		/// @param srcstr The shorter input string
+		/// @param length How long to make the fixed length string
+		/// @param fillchar What character to fill the remainder of the string with
+		/// @return The resulting fixed length string
+		char *write_fixed_length_string(string srcstr, int length, char fillchar);
 	}
 }
 

@@ -13,6 +13,8 @@ namespace wadarchive
 
 	extern const int FRONT_BUFFER_LENGTH;
 	extern const int SUFFIX_BUFFER_LENGTH;
+
+	extern const float MIN_READABLE_ENGINE_VERSION;
 }
 
 #endif
