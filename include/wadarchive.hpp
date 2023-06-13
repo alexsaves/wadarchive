@@ -62,6 +62,15 @@ namespace wadarchive
 		/// @return Whether the file is present
 		bool has_file(string filename);
 
+		/// @brief Get the file as a wadentry. This will return a fresh copy and not retain the data itself.
+		/// @param filename The filename to get
+		/// @return The wad entry
+		WadEntry *get_file(string filename);
+
+		/// @brief Get the entries in the archive
+		/// @return The list of entries by filename
+		vector<string> get_entries();
+
 		/// @brief The location of the file being read
 		string file_location;
 

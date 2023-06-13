@@ -120,6 +120,12 @@ int main(int argc, char *argv[])
 			cout << "Error: not a valid archive." << endl;
 		}
 
+		vector<string> file_entries = reader.get_entries();
+
+		for (int i = 0; i < file_entries.size(); i++) {
+			cout << file_entries[i] << endl;
+		}
+
 		reader.close();
 
 		return EXIT_SUCCESS;

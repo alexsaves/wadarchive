@@ -209,6 +209,41 @@ namespace wadarchive
 		return entry_names.contains(filename);
 	}
 
+	/// @brief Get the entries in the archive
+	/// @return The list of entries by filename
+	vector<string> WadArchiveReader::get_entries()
+	{
+		vector<string> out_entries;
+		unsigned int entrycount = entry_info.size();
+		for (unsigned int i = 0; i < entrycount; i++)
+		{
+			WadEntry *wad = entry_info[i];
+			out_entries.push_back(wad->file_name);
+		}
+		return out_entries;
+	}
+
+	/// @brief Get the file as a wadentry. This will return a fresh copy and not retain the data itself.
+	/// @param filename The filename to get
+	/// @return The wad entry
+	WadEntry *WadArchiveReader::get_file(string filename)
+	{
+		WadEntry *entry = entry_names[filename];
+		WadEntry *newEntry = new WadEntry();
+		newEntry->byte_location = entry->byte_location;
+		newEntry->file_name = entry->file_name;
+		newEntry->size = entry->size;
+		newEntry->file_data = entry->file_data;
+
+		// Get the data
+		if (entry->file_data == NULL)
+		{
+			newEntry->file_data = utils::read_file_range((char *)file_location.c_str(), newEntry->byte_location, newEntry->size);
+		}
+
+		return newEntry;
+	}
+
 	/// @brief Destroy the reader
 	WadArchiveReader::~WadArchiveReader()
 	{
