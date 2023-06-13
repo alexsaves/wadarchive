@@ -17,7 +17,7 @@ BUILD_DIR = build/
 DEBUG_RELEASE = debug
 CC = g++
 SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(INCLUDE_SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*/*.cpp) static/argspp/src/args.cpp
-INCLUDE_PATHS = -I static/json/include -I static/argspp/src -I static/glob/single_include/glob
+INCLUDE_PATHS = -I static/json/include -I static/argspp/src -I static/glob/single_include/glob  -I static/zstr/src
 COMPILER_FLAGS = -std=c++20 -Wall -O0 -Wno-deprecated -Wno-unknown-pragmas
 LIBRARY_PATHS = 
 LINKER_FLAGS = 

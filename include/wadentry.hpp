@@ -16,8 +16,8 @@ namespace wadarchive
 		/// @brief The uncompressed file size
 		int size;
 
-		/// @brief The compressed size
-		int compressed_size;
+		/// @brief The location of the file
+		int byte_location;
 
 		/// @brief The uncompressed data
 		char *file_data;

@@ -11,7 +11,7 @@ namespace wadarchive
 	WadEntry::WadEntry()
 	{
 		size = 0;
-		compressed_size = 0;
+		byte_location = 0;
 	}
 
 	/// @brief Create a new instance with data

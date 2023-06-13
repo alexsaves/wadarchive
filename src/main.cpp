@@ -86,7 +86,8 @@ int main(int argc, char *argv[])
 			{
 				final_dest_file = final_dest_file.erase(0, 1);
 			}
-			writer.AddFile(final_dest_file, entry->file_data, entry->size);
+			WadEntry *tmp = writer.AddFile(final_dest_file, entry->file_data, entry->size);
+			delete tmp;
 			delete entry;
 
 			if (!is_quiet)

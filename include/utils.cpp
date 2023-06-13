@@ -36,6 +36,16 @@ namespace wadarchive
 			return stream.str();
 		}
 
+		/// @brief Get an integer as a string
+		/// @param num The number to format
+		/// @return A nicely formatted string
+		string get_int_string(int num)
+		{
+			stringstream stream;
+			stream << num;
+			return stream.str();
+		}
+
 		/// @brief See if the location points directly to a file
 		/// @param src The file location
 		/// @return Whether or not its a file
@@ -107,6 +117,15 @@ namespace wadarchive
 			file.close();
 			WadEntry *wentry = new WadEntry(path, buffer, size);
 			return wentry;
+		}
+
+		/// @brief Get the size of a file
+		/// @param filename The path to the file
+		/// @return The file size in bytes
+		int filesize(string filename)
+		{
+			std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
+			return in.tellg();
 		}
 	}
 }

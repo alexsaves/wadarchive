@@ -45,6 +45,16 @@ namespace wadarchive
 		/// @param path The path to the file
 		/// @return The character array of the file
 		WadEntry * read_file(string path);
+
+		/// @brief Get the size of a file
+		/// @param filename The path to the file
+		/// @return The file size in bytes
+		int filesize(string filename);
+
+		/// @brief Get an integer as a string
+		/// @param num The number to format
+		/// @return A nicely formatted string
+		string get_int_string(int num);
 	}
 }
 

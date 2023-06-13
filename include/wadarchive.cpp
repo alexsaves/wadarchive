@@ -9,6 +9,9 @@
 #include <iostream>
 #include <string>
 
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
+
 using namespace std;
 
 namespace wadarchive
@@ -30,10 +33,10 @@ namespace wadarchive
 		const int bufferSize = 30;
 		char buffer[bufferSize];
 		char fillChar = ' ';
-    	std::fill_n(buffer, bufferSize, fillChar);
+		std::fill_n(buffer, bufferSize, fillChar);
 
 		std::copy(str.begin(), str.end(), buffer);
-		
+
 		// Create an empty file
 		// Open the file in binary mode
 		std::ofstream file(file_location, std::ios::binary);
@@ -41,7 +44,7 @@ namespace wadarchive
 		if (file.is_open())
 		{
 			// Write the character array to the file
-			file.write(buffer, bufferSize);
+			file.write(buffer, bufferSize);			
 
 			// Close the file
 			file.close();
@@ -54,7 +57,35 @@ namespace wadarchive
 	/// @brief Wrap up the file
 	void WadArchiveWriter::close()
 	{
-		// no op
+		// Write the json blob
+		int jsonlocation = utils::filesize(file_location);
+
+		json j;
+
+		// Dump the json to a char array
+		string s = j.dump();
+		char buffer[s.length()];
+		std::copy(s.begin(), s.end(), buffer);
+
+		// Dump the json location to a buffer
+		string jsonlocationstr = utils::get_int_string(jsonlocation);
+		const int locbuffersize = 30;
+		char locbuffer[locbuffersize];
+		char fillChar = ' ';
+		std::fill_n(locbuffer, locbuffersize, fillChar);
+		std::copy(jsonlocationstr.begin(), jsonlocationstr.end(), locbuffer);
+
+		std::ofstream file(file_location, std::ios::binary | std::ios::app);
+
+		if (file.is_open())
+		{
+			// Write the character array to the file
+			file.write(buffer, s.length());
+			file.write(locbuffer, locbuffersize);
+
+			// Close the file
+			file.close();
+		}
 	}
 
 	/// @brief Add a new file entry to the wad
@@ -62,6 +93,19 @@ namespace wadarchive
 	/// @param data The data to be written
 	WadEntry *WadArchiveWriter::AddFile(string filename, char *data, int datalen)
 	{
-		return NULL;
+		WadEntry *wad = new WadEntry(filename, NULL, datalen);
+		wad->byte_location = utils::filesize(file_location);
+
+		std::ofstream file(file_location, std::ios::binary | std::ios::app);
+
+		if (file.is_open())
+		{
+			// Write the character array to the file
+			file.write(data, datalen);
+
+			// Close the file
+			file.close();
+		}
+		return wad;
 	}
 }
