@@ -6,6 +6,7 @@
 
 #include "../include/utils.hpp"
 #include "../include/constants.hpp"
+#include "../include/wadarchive.hpp"
 
 using namespace std;
 using namespace filesystem;
@@ -71,18 +72,27 @@ int main(int argc, char *argv[])
 			return EXIT_SUCCESS;
 		}
 
+		WadArchiveWriter writer(dest_wad);
+
 		vector<string> file_list = utils::ls_recursive(source_glob);
 		unsigned int match_count = file_list.size();
 		for (unsigned int i = 0; i < match_count; i++)
 		{
-			string final_dest_file = file_list[i].replace(0, source_glob.length(), "");
+			string full_file_path = string(file_list[i]);
+			char * buf = utils::read_file(full_file_path);
+			string final_dest_file = full_file_path.replace(0, source_glob.length(), "");
 			if (final_dest_file[0] == '/' || final_dest_file[0] == '\\')
 			{
 				final_dest_file = final_dest_file.erase(0, 1);
 			}
+			writer.AddFile(final_dest_file, buf);
+			free(buf);
+
 			if (!is_quiet)
 				cout << final_dest_file << "." << endl;
 		}
+
+		writer.close();
 
 		return EXIT_SUCCESS;
 	}

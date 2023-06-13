@@ -89,5 +89,21 @@ namespace wadarchive
 			}
 			return files;
 		}
+
+		/// @brief Read a file as a character array
+		/// @param path The path to the file
+		/// @return The character array of the file
+		char *read_file(string path)
+		{
+			char *buffer;
+			long size;
+			ifstream file(path, ios::in | ios::binary | ios::ate);
+			size = file.tellg();
+			file.seekg(0, ios::beg);
+			buffer = new char[size];
+			file.read(buffer, size);
+			file.close();
+			return buffer;
+		}
 	}
 }

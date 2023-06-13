@@ -38,6 +38,11 @@ namespace wadarchive
 		/// @param path The starting folder
 		/// @return The list of files
 		vector<string> ls_recursive(const std::filesystem::path &path);
+
+		/// @brief Read a file as a character array
+		/// @param path The path to the file
+		/// @return The character array of the file
+		char * read_file(string path);
 	}
 }
 
