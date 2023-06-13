@@ -2,6 +2,7 @@
 #define WARCHIVE_WARCHIVE_H
 #include <stdlib.h>
 #include <iostream>
+#include <map>
 
 #include "wadentry.hpp"
 
@@ -56,6 +57,11 @@ namespace wadarchive
 		/// @return Whether or not it was successful
 		bool init();
 
+		/// @brief Is the provided file present?
+		/// @param filename The file name
+		/// @return Whether the file is present
+		bool has_file(string filename);
+
 		/// @brief The location of the file being read
 		string file_location;
 
@@ -65,6 +71,9 @@ namespace wadarchive
 	private:
 		/// @brief Holds the entry names
 		vector<WadEntry *> entry_info;
+
+		/// @brief A convenient holder of all the entry names
+		map<string, WadEntry *> entry_names;
 	};
 }
 

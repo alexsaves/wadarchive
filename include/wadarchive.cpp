@@ -196,7 +196,17 @@ namespace wadarchive
 			WadEntry *wad = new WadEntry(ename, NULL, esize);
 			wad->byte_location = eloc;
 			entry_info.push_back(wad);
+			entry_names.insert(pair<string, WadEntry *>(ename, wad));
 		}
+		return true;
+	}
+
+	/// @brief Is the provided file present?
+	/// @param filename The file name
+	/// @return Whether the file is present
+	bool WadArchiveReader::has_file(string filename)
+	{
+		return entry_names.contains(filename);
 	}
 
 	/// @brief Destroy the reader
