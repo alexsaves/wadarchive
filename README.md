@@ -19,9 +19,14 @@ A quick way to do things with submodules is:
 # Command Line usage
 
 The general usage to archive a folder is...
-
 ```
-wadarchive -s [SOURCE FOLDER] -d [DESTINATION]
+wadarchive -a -s [SOURCE FOLDER] -d [DESTINATION]
 ```
-
-You may use unix-style glob commands. Some example usages include:
+To extract an archive:
+```
+wadarchive -x -s [SOURCE WAD] -d [DESTINATION]
+```
+You can also tell it to be silent:
+```
+wadarchive -q -a -s [SOURCE FOLDER] -d [DESTINATION]
+```

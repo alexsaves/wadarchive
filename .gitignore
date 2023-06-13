@@ -35,3 +35,6 @@ build/debug/*
 build/release/*
 !build/debug/.gitkeep
 !build/release/.gitkeep
+test/testoutput/*.wad
+test/testoutput/extraction/*
+!test/testoutput/extraction/.gitkeep

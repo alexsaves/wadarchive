@@ -22,14 +22,19 @@ int main(int argc, char *argv[])
 	cout << ENGINE_NAME << " v" << utils::get_double_as_string(ENGINE_VERSION, 2) << endl;
 
 	args::ArgParser parser;
-	parser.helptext = "Usage: wadarchive -s test/testdata -d out.wad";
+	parser.helptext = "Usage to archive a folder: wadarchive -a -s test/testdata -d archive.wad\nUsage to extract a wadfile: wadarchive -x -s archive.wad -d ./";
 	parser.version = utils::get_double_as_string(ENGINE_VERSION, 2);
 	parser.option("dest d", "archive.wad");
 	parser.option("src s");
+	parser.flag("archive a");
+	parser.flag("extract x");
+	parser.flag("quiet q");
 	parser.parse(argc, argv);
 
 	string source_glob = parser.value("s");
 	string dest_wad = parser.value("d");
+
+	bool is_quiet = parser.found("q");
 
 	// See if things are obviously invalid
 	if (dest_wad.length() == 0 || source_glob.length() == 0)
@@ -38,46 +43,60 @@ int main(int argc, char *argv[])
 		return EXIT_SUCCESS;
 	}
 
-	// Check if its a simple folder input
-	bool source_is_dir = utils::location_is_folder((char *)source_glob.c_str());
+	enum ARCHIVE_MODE
+	{
+		archive,
+		extract
+	};
+	ARCHIVE_MODE archive_mode = archive;
 
-	if (!source_is_dir) {
-		cout << "Error: Source location must be a folder (eg \"files/files_to_zip\")." << endl;
+	if (!parser.found("a") && !parser.found("x"))
+	{
+		cout << "Error: You must specify whether you are archiving or extracting." << endl
+			 << parser.helptext << endl;
 		return EXIT_SUCCESS;
 	}
 
-	cout << "Looking in \"" << source_glob << "\"" << endl;
-
-	const std::filesystem::path path(source_glob);
-
-	cout << "parent_path: " << path.parent_path() << endl;
-	cout << "stem: " << path.stem() << endl;
-	cout << "root_path: " << path.root_path() << endl;
-	cout << "root_directory: " << path.root_directory() << endl;
-
-	vector<string> file_list = utils::ls_recursive(source_glob);
-
-	unsigned int match_count = file_list.size();
-
-	for (unsigned int i = 0; i < match_count; i++)
+	if (archive_mode == archive)
 	{
-		string final_file = file_list[i].replace(0, source_glob.length(), "");
-		cout << "FILE: " << file_list[i] << " becomes: " << final_file << endl;
-	}
-	/*vector<path> file_list = glob::rglob(source_glob);
-	unsigned int match_count = file_list.size();
+		if (!is_quiet)
+			cout << "Wadding folder " << source_glob << "..." << endl;
 
-	for (unsigned int i = 0; i < match_count; i++)
-	{
-		if (utils::location_is_file((char *)file_list[i].c_str()))
+		// Check if its a simple folder input
+		bool source_is_dir = utils::location_is_folder((char *)source_glob.c_str());
+
+		if (!source_is_dir)
 		{
-			cout << "New file------" << endl;
-			path fpath = file_list[i];			
-			cout << fpath.relative_path() << endl;
-			cout << fpath.root_directory() << endl;
-			cout << fpath.root_path() << endl;
+			cout << "Error: Source location must be a folder (eg \"files/files_to_zip\")." << endl;
+			return EXIT_SUCCESS;
 		}
-	}*/
+
+		vector<string> file_list = utils::ls_recursive(source_glob);
+		unsigned int match_count = file_list.size();
+		for (unsigned int i = 0; i < match_count; i++)
+		{
+			string final_dest_file = file_list[i].replace(0, source_glob.length(), "");
+			if (final_dest_file[0] == '/' || final_dest_file[0] == '\\')
+			{
+				final_dest_file = final_dest_file.erase(0, 1);
+			}
+			if (!is_quiet)
+				cout << final_dest_file << "." << endl;
+		}
+
+		return EXIT_SUCCESS;
+	}
+	else
+	{
+		if (!utils::file_exists(source_glob))
+		{
+			cout << "Error: WAD not found: " << source_glob << endl;
+			return EXIT_SUCCESS;
+		}
+
+		if (!is_quiet)
+			cout << "Unwadding " << source_glob << "..." << endl;
+	}
 
 	return EXIT_SUCCESS;
 }
