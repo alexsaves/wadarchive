@@ -9,6 +9,8 @@
 #include <filesystem>
 #include <iostream>
 
+#include "wadentry.hpp"
+
 namespace fs = std::filesystem;
 
 namespace wadarchive
@@ -93,7 +95,7 @@ namespace wadarchive
 		/// @brief Read a file as a character array
 		/// @param path The path to the file
 		/// @return The character array of the file
-		char *read_file(string path)
+		WadEntry *read_file(string path)
 		{
 			char *buffer;
 			long size;
@@ -103,7 +105,8 @@ namespace wadarchive
 			buffer = new char[size];
 			file.read(buffer, size);
 			file.close();
-			return buffer;
+			WadEntry *wentry = new WadEntry(path, buffer, size);
+			return wentry;
 		}
 	}
 }

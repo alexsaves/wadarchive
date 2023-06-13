@@ -7,6 +7,7 @@
 #include "../include/utils.hpp"
 #include "../include/constants.hpp"
 #include "../include/wadarchive.hpp"
+#include "../include/wadentry.hpp"
 
 using namespace std;
 using namespace filesystem;
@@ -79,14 +80,14 @@ int main(int argc, char *argv[])
 		for (unsigned int i = 0; i < match_count; i++)
 		{
 			string full_file_path = string(file_list[i]);
-			char * buf = utils::read_file(full_file_path);
+			WadEntry *entry = utils::read_file(full_file_path);
 			string final_dest_file = full_file_path.replace(0, source_glob.length(), "");
 			if (final_dest_file[0] == '/' || final_dest_file[0] == '\\')
 			{
 				final_dest_file = final_dest_file.erase(0, 1);
 			}
-			writer.AddFile(final_dest_file, buf);
-			free(buf);
+			writer.AddFile(final_dest_file, entry->file_data, entry->size);
+			delete entry;
 
 			if (!is_quiet)
 				cout << final_dest_file << "." << endl;

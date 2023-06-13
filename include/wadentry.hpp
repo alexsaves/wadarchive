@@ -19,8 +19,17 @@ namespace wadarchive
 		/// @brief The compressed size
 		int compressed_size;
 
+		/// @brief The uncompressed data
+		char *file_data;
+
 		/// @brief Create a new empty instance
 		WadEntry();
+
+		/// @brief Create a new instance with data
+		/// @param fname The name of the file
+		/// @param data The data
+		/// @param filelen The data length
+		WadEntry(string fname, char * data, int filelen);
 
 		/// @brief Destroy the entry
 		~WadEntry();

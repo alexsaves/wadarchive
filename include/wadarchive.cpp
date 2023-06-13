@@ -2,6 +2,12 @@
 #include "wadentry.hpp"
 
 #include "utils.hpp"
+#include "constants.hpp"
+
+#include <stdlib.h>
+#include <cstdio>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -14,20 +20,39 @@ namespace wadarchive
 		file_location = destination_file;
 
 		// Check if the file exists
-		if (utils::file_exists(file_location)) {
+		if (utils::file_exists(file_location))
+		{
 			// delete the file
-			remove(file_location);
+			remove(file_location.c_str());
 		}
 
-		// Create an empty file
+		string str = string(ENGINE_NAME) + "[" + utils::get_double_as_string(ENGINE_VERSION, 2) + "]";
+		const int bufferSize = 30;
+		char buffer[bufferSize];
+		char fillChar = ' ';
+    	std::fill_n(buffer, bufferSize, fillChar);
+
+		std::copy(str.begin(), str.end(), buffer);
 		
+		// Create an empty file
+		// Open the file in binary mode
+		std::ofstream file(file_location, std::ios::binary);
+
+		if (file.is_open())
+		{
+			// Write the character array to the file
+			file.write(buffer, bufferSize);
+
+			// Close the file
+			file.close();
+		}
 	}
 
 	/// @brief Destroy the writer
 	WadArchiveWriter::~WadArchiveWriter() {}
 
 	/// @brief Wrap up the file
-	void close()
+	void WadArchiveWriter::close()
 	{
 		// no op
 	}
@@ -35,7 +60,8 @@ namespace wadarchive
 	/// @brief Add a new file entry to the wad
 	/// @param filename The name of the entry
 	/// @param data The data to be written
-	WadEntry *AddFile(string filename, char *data)
+	WadEntry *WadArchiveWriter::AddFile(string filename, char *data, int datalen)
 	{
+		return NULL;
 	}
 }

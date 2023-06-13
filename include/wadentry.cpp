@@ -14,6 +14,21 @@ namespace wadarchive
 		compressed_size = 0;
 	}
 
+	/// @brief Create a new instance with data
+	/// @param fname The name of the file
+	/// @param data The data
+	/// @param filelen The data length
+	WadEntry::WadEntry(string fname, char *data, int filelen)
+	{
+		file_name = fname;
+		size = filelen;
+		file_data = data;
+	}
+
 	/// @brief Destroy the entry
-	WadEntry::~WadEntry() {}
+	WadEntry::~WadEntry() {
+		if (file_data != NULL) {
+			free(file_data);
+		}
+	}
 }

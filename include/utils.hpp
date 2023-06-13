@@ -4,6 +4,8 @@
 #include <fstream>
 #include <stdlib.h>
 
+#include "wadentry.hpp"
+
 using namespace std;
 
 /**
@@ -42,7 +44,7 @@ namespace wadarchive
 		/// @brief Read a file as a character array
 		/// @param path The path to the file
 		/// @return The character array of the file
-		char * read_file(string path);
+		WadEntry * read_file(string path);
 	}
 }
 

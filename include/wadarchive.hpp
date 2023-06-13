@@ -22,7 +22,7 @@ namespace wadarchive
 		/// @brief Add a new file entry to the wad
 		/// @param filename The name of the entry
 		/// @param data The data to be written
-		WadEntry * AddFile(string filename, char *data);
+		WadEntry * AddFile(string filename, char *data, int datalen);
 
 		/// @brief Wrap up the file
 		void close();
