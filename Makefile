@@ -12,11 +12,12 @@ ifeq ($(detected_OS),MSYS)
 endif
 
 SRC_DIR = src
+INCLUDE_SRC_DIR = include
 BUILD_DIR = build/
 DEBUG_RELEASE = debug
 CC = g++
-SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*/*.cpp) $(wildcard include/cargs/src/*.c)
-INCLUDE_PATHS = -I include/json/include -I include/cargs/include
+SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(INCLUDE_SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*/*.cpp) $(wildcard static/cargs/src/*.c) $(wildcard static/glob/source/*.cpp)
+INCLUDE_PATHS = -I static/json/include -I static/cargs/include -I static/glob/include
 COMPILER_FLAGS = -std=c++20 -Wall -O0 -Wno-deprecated
 LIBRARY_PATHS = 
 LINKER_FLAGS = 

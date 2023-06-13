@@ -1,8 +1,12 @@
-[submodule "include/json"]
-	path = include/json
-	url = https://github.com/nlohmann/json.git
-	branch = master
-[submodule "include/cargs"]
-	path = include/cargs
+[submodule "static/cargs"]
+	path = static/cargs
 	url = https://github.com/likle/cargs.git
 	branch = master
+[submodule "static/json"]
+	path = static/json
+	url = https://github.com/nlohmann/json.git
+	branch = master	
+[submodule "static/glob"]
+	path = static/glob
+	url = https://github.com/p-ranav/glob.git
+	branch = master	

@@ -3,8 +3,8 @@
 
 #include <cargs.h>
 
-#include "utils.hpp"
-#include "constants.hpp"
+#include "../include/utils.hpp"
+#include "../include/constants.hpp"
 
 using namespace std;
 using namespace wadarchive;
