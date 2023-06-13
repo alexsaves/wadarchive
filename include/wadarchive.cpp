@@ -187,9 +187,15 @@ namespace wadarchive
 			return false;
 		}
 		json entrydata = filedata["entries"];
-		for (json::iterator it = entrydata.begin(); it != entrydata.end(); ++it)
+		for (auto &el : entrydata.items())
 		{
-			std::cout << *it << '\n';
+			json entrydata = el.value();
+			string ename = entrydata["name"];
+			int esize = entrydata["size"];
+			int eloc = entrydata["location"];
+			WadEntry *wad = new WadEntry(ename, NULL, esize);
+			wad->byte_location = eloc;
+			entry_info.push_back(wad);
 		}
 	}
 

@@ -64,7 +64,7 @@ namespace wadarchive
 
 	private:
 		/// @brief Holds the entry names
-		vector<string> entry_names;
+		vector<WadEntry *> entry_info;
 	};
 }
 
