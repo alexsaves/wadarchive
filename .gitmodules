@@ -1,12 +1,8 @@
-[submodule "static/cargs"]
-	path = static/cargs
-	url = https://github.com/likle/cargs.git
-	branch = master
 [submodule "static/json"]
 	path = static/json
 	url = https://github.com/nlohmann/json.git
 	branch = master	
-[submodule "static/glob"]
-	path = static/glob
-	url = https://github.com/p-ranav/glob.git
+[submodule "static/argspp"]
+	path = static/argspp
+	url = https://github.com/dmulholl/argspp.git
 	branch = master	

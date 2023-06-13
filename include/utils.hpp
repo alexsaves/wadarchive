@@ -23,6 +23,21 @@ namespace wadarchive
 		/// @param precision The number of decimals
 		/// @return A nicely formatted string
 		string get_double_as_string(double num, int precision);
+
+		/// @brief See if the location points directly to a file
+		/// @param src The file location
+		/// @return Whether or not its a file
+		bool location_is_file(char *src);
+
+		/// @brief See if the location points directly to a folder
+		/// @param src The file or folder location
+		/// @return Whether or not its a folder
+		bool location_is_folder(char *src);
+
+		/// @brief Get a recursive list of all files in a folder
+		/// @param path The starting folder
+		/// @return The list of files
+		vector<string> ls_recursive(const std::filesystem::path &path);
 	}
 }
 
