@@ -9,6 +9,7 @@ using namespace std;
 
 namespace wadarchive
 {
+    /// @brief Writes a wad archive
     class WadArchiveWriter
     {
     public:
@@ -31,8 +32,26 @@ namespace wadarchive
 		string file_location;
 
 		/// @brief Holds the list of entries
-		vector<WadEntry> entries;
+		vector<WadEntry *> entries;
     };
+
+	/// @brief Reads a wad archive
+	class WadArchiveReader
+    {
+	public:
+        /// @brief Reads a wad archive from the file system
+        /// @param source_wad_file The location of the file
+        WadArchiveReader(string source_wad_file);
+
+		/// @brief Destroy the reader
+        ~WadArchiveReader();
+
+		/// @brief Wrap up the reader
+		void close();
+
+		/// @brief The location of the file being read
+		string file_location;
+	};
 }
 
 #endif

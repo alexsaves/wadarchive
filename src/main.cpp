@@ -59,6 +59,11 @@ int main(int argc, char *argv[])
 		return EXIT_SUCCESS;
 	}
 
+	if (parser.found("x")) {
+		// extract mode
+		archive_mode = extract;
+	}
+
 	if (archive_mode == archive)
 	{
 		if (!is_quiet)
@@ -86,8 +91,8 @@ int main(int argc, char *argv[])
 			{
 				final_dest_file = final_dest_file.erase(0, 1);
 			}
-			WadEntry *tmp = writer.AddFile(final_dest_file, entry->file_data, entry->size);
-			delete tmp;
+			writer.AddFile(final_dest_file, entry->file_data, entry->size);
+			
 			delete entry;
 
 			if (!is_quiet)
@@ -108,6 +113,12 @@ int main(int argc, char *argv[])
 
 		if (!is_quiet)
 			cout << "Unwadding " << source_glob << "..." << endl;
+
+		WadArchiveReader reader(source_glob);
+
+		reader.close();
+
+		return EXIT_SUCCESS;
 	}
 
 	return EXIT_SUCCESS;

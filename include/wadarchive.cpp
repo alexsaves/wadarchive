@@ -44,7 +44,7 @@ namespace wadarchive
 		if (file.is_open())
 		{
 			// Write the character array to the file
-			file.write(buffer, bufferSize);			
+			file.write(buffer, bufferSize);
 
 			// Close the file
 			file.close();
@@ -52,7 +52,15 @@ namespace wadarchive
 	}
 
 	/// @brief Destroy the writer
-	WadArchiveWriter::~WadArchiveWriter() {}
+	WadArchiveWriter::~WadArchiveWriter()
+	{
+		unsigned int entrycount = entries.size();
+		for (unsigned int i = 0; i < entrycount; i++)
+		{
+			WadEntry *wad = entries[i];
+			delete wad;
+		}
+	}
 
 	/// @brief Wrap up the file
 	void WadArchiveWriter::close()
@@ -61,6 +69,24 @@ namespace wadarchive
 		int jsonlocation = utils::filesize(file_location);
 
 		json j;
+
+		j["engine"] = ENGINE_NAME;
+		j["engine_ver"] = ENGINE_VERSION;
+
+		json entrylist;
+
+		unsigned int entrycount = entries.size();
+		for (unsigned int i = 0; i < entrycount; i++)
+		{
+			WadEntry *wad = entries[i];
+			json wadj;
+			wadj["name"] = wad->file_name;
+			wadj["size"] = wad->size;
+			wadj["location"] = wad->byte_location;
+			entrylist.push_back(wadj);
+		}
+
+		j["entries"] = entrylist;
 
 		// Dump the json to a char array
 		string s = j.dump();
@@ -106,6 +132,26 @@ namespace wadarchive
 			// Close the file
 			file.close();
 		}
+		entries.push_back(wad);
 		return wad;
+	}
+
+	/// @brief Reads a wad archive from the file system
+	/// @param source_wad_file The location of the file
+	WadArchiveReader::WadArchiveReader(string source_wad_file)
+	{
+		file_location = source_wad_file;
+	}
+
+	/// @brief Destroy the reader
+	WadArchiveReader::~WadArchiveReader()
+	{
+		// no-op
+	}
+
+	/// @brief Wrap up the reader
+	void WadArchiveReader::close()
+	{
+		// NO-op
 	}
 }
