@@ -1,16 +1,3 @@
-ifeq '$(findstring ;,$(PATH))' ';'
-    detected_OS := Windows
-else
-    detected_OS := $(shell uname 2>/dev/null || echo Unknown)
-    detected_OS := $(patsubst CYGWIN%,Cygwin,$(detected_OS))
-    detected_OS := $(patsubst MSYS%,MSYS,$(detected_OS))
-    detected_OS := $(patsubst MINGW%,MSYS,$(detected_OS))
-endif
-
-ifeq ($(detected_OS),MSYS)
-    echo Detected Windows
-endif
-
 SRC_DIR = src
 INCLUDE_SRC_DIR = include
 BUILD_DIR = build
