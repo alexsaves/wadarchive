@@ -145,11 +145,10 @@ int main(int argc, char *argv[])
 			WadEntry *wad = reader.get_file(file_entries[i]);
 			totalfilesize += wad->size;
 			filesystem::path path(file_entries[i]);
-			string final_path_str = utils::path_join(dest_path_str, path.parent_path());
+			string final_path_str = utils::path_join(dest_path_str, path.parent_path().generic_string());
 			if (!filesystem::is_directory(final_path_str) || !filesystem::exists(final_path_str))
 			{
-				string parpath = path.parent_path();
-				utils::relative_path_create(dest_path_str, parpath);
+				utils::relative_path_create(dest_path_str, path.parent_path().generic_string());
 			}
 
 			// Write the file

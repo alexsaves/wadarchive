@@ -8,6 +8,7 @@
 #include <iostream>
 #include <filesystem>
 #include <iostream>
+#include <vector>
 
 #include "wadentry.hpp"
 
@@ -178,7 +179,7 @@ namespace wadarchive
 		/// @param p1 First path
 		/// @param p2 Second path
 		/// @return Final combined path
-		string path_join(const std::string &p1, const std::string &p2)
+		string path_join(string &p1, string &p2)
 		{
 			char sep = '/';
 			std::string tmp = p1;

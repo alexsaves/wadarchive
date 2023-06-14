@@ -80,7 +80,7 @@ namespace wadarchive
 		/// @param p1 First path
 		/// @param p2 Second path
 		/// @return Final combined path
-		string path_join(const std::string &p1, const std::string &p2);
+		string path_join(string &p1, string &p2);
 
 		/// @brief Ensure a relative path exists
 		/// @param rootpath The root path that exists
