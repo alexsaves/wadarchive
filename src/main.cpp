@@ -33,13 +33,13 @@ int main(int argc, char *argv[])
 	parser.flag("quiet q");
 	parser.parse(argc, argv);
 
-	string source_glob = parser.value("s");
-	string dest_wad = parser.value("d");
+	string source_path_str = parser.value("s");
+	string dest_path_str = parser.value("d");
 
 	bool is_quiet = parser.found("q");
 
 	// See if things are obviously invalid
-	if (dest_wad.length() == 0 || source_glob.length() == 0)
+	if (dest_path_str.length() == 0 || source_path_str.length() == 0)
 	{
 		cout << parser.helptext << endl;
 		return EXIT_SUCCESS;
@@ -59,7 +59,8 @@ int main(int argc, char *argv[])
 		return EXIT_SUCCESS;
 	}
 
-	if (parser.found("x")) {
+	if (parser.found("x"))
+	{
 		// extract mode
 		archive_mode = extract;
 	}
@@ -67,10 +68,10 @@ int main(int argc, char *argv[])
 	if (archive_mode == archive)
 	{
 		if (!is_quiet)
-			cout << "Wadding folder " << source_glob << "..." << endl;
+			cout << "Wadding folder " << source_path_str << "..." << endl;
 
 		// Check if its a simple folder input
-		bool source_is_dir = utils::location_is_folder((char *)source_glob.c_str());
+		bool source_is_dir = utils::location_is_folder((char *)source_path_str.c_str());
 
 		if (!source_is_dir)
 		{
@@ -78,21 +79,21 @@ int main(int argc, char *argv[])
 			return EXIT_SUCCESS;
 		}
 
-		WadArchiveWriter writer(dest_wad);
+		WadArchiveWriter writer(dest_path_str);
 
-		vector<string> file_list = utils::ls_recursive(source_glob);
+		vector<string> file_list = utils::ls_recursive(source_path_str);
 		unsigned int match_count = file_list.size();
 		for (unsigned int i = 0; i < match_count; i++)
 		{
 			string full_file_path = string(file_list[i]);
 			WadEntry *entry = utils::read_file(full_file_path);
-			string final_dest_file = full_file_path.replace(0, source_glob.length(), "");
+			string final_dest_file = full_file_path.replace(0, source_path_str.length(), "");
 			if (final_dest_file[0] == '/' || final_dest_file[0] == '\\')
 			{
 				final_dest_file = final_dest_file.erase(0, 1);
 			}
 			writer.AddFile(final_dest_file, entry->file_data, entry->size);
-			
+
 			delete entry;
 
 			if (!is_quiet)
@@ -105,30 +106,81 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		if (!utils::file_exists(source_glob))
+		if (!utils::file_exists(source_path_str))
 		{
-			cout << "Error: WAD not found: " << source_glob << endl;
+			cout << "Error: WAD not found: " << source_path_str << endl;
+			return EXIT_SUCCESS;
+		}
+
+		if (utils::location_is_file((char *)dest_path_str.c_str()))
+		{
+			cout << "Error: Destination is a file, not a path: " << dest_path_str << endl;
 			return EXIT_SUCCESS;
 		}
 
 		if (!is_quiet)
-			cout << "Unwadding " << source_glob << "..." << endl;
+			cout << "Unwadding " << source_path_str << "..." << endl;
 
-		WadArchiveReader reader(source_glob);
+		WadArchiveReader reader(source_path_str);
 
-		if (!reader.init()) {
+		if (!reader.init())
+		{
 			cout << "Error: not a valid archive." << endl;
+			return EXIT_SUCCESS;
+		}
+
+		if (reader.get_entries().size() == 0)
+		{
+			cout << "Error: no files found in the wad." << endl;
+			return EXIT_SUCCESS;
 		}
 
 		vector<string> file_entries = reader.get_entries();
 
-		for (int i = 0; i < file_entries.size(); i++) {
-			cout << file_entries[i] << endl;
+		filesystem::path dest_path(dest_path_str);
+		int totalfilesize = 0;
+
+		for (int i = 0; i < file_entries.size(); i++)
+		{
+			WadEntry *wad = reader.get_file(file_entries[i]);
+			totalfilesize += wad->size;
+			filesystem::path path(file_entries[i]);
+			string final_path_str = utils::path_join(dest_path_str, path.parent_path());
+			if (!filesystem::is_directory(final_path_str) || !filesystem::exists(final_path_str))
+			{
+				string parpath = path.parent_path();
+				utils::relative_path_create(dest_path_str, parpath);
+			}
+
+			// Write the file
+			string final_file_path_str = utils::path_join(dest_path_str, file_entries[i]);
+			std::ofstream file(final_file_path_str, std::ios::binary);
+
+			if (file.is_open())
+			{
+				file.write(wad->file_data, wad->size);
+
+				// Close the file
+				file.close();
+			}
+
+			if (!is_quiet)
+			{
+				if (i == 0)
+				{
+					cout << endl;
+				}
+				cout << file_entries[i] << " (" << wad->size << " bytes)" << endl;
+			}
+			delete (wad);
 		}
 
 		reader.close();
-
-		return EXIT_SUCCESS;
+		if (!is_quiet)
+		{
+			cout << endl
+				 << "Unwadded " << file_entries.size() << " files (" << totalfilesize << " bytes)." << endl;
+		}
 	}
 
 	return EXIT_SUCCESS;

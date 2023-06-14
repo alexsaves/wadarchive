@@ -47,6 +47,8 @@ setrelease:
 	DEBUG_RELEASE = release
 	DEBUG_FLAG = 
 	
-# Clean build folder
+# Clean build folder and extraction folder
 clean:	
 	rm -rf $(BUILD_DIR)/$(DEBUG_RELEASE)/*
+	rm -rf test/testoutput/extraction/*
+	rm -rf test/testoutput/extraction/images

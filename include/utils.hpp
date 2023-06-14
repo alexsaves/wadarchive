@@ -75,6 +75,17 @@ namespace wadarchive
 		/// @param fillchar What character to fill the remainder of the string with
 		/// @return The resulting fixed length string
 		char *write_fixed_length_string(string srcstr, int length, char fillchar);
+
+		/// @brief Combine two path strings into one
+		/// @param p1 First path
+		/// @param p2 Second path
+		/// @return Final combined path
+		string path_join(const std::string &p1, const std::string &p2);
+
+		/// @brief Ensure a relative path exists
+		/// @param rootpath The root path that exists
+		/// @param relpath The new relative path
+		void relative_path_create(string rootpath, string relpath);
 	}
 }
 

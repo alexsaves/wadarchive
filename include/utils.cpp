@@ -165,12 +165,64 @@ namespace wadarchive
 		/// @param length How long to make the fixed length string
 		/// @param fillchar What character to fill the remainder of the string with
 		/// @return The resulting fixed length string
-		char *write_fixed_length_string(string srcstr, int length, char fillchar) {
+		char *write_fixed_length_string(string srcstr, int length, char fillchar)
+		{
 			char *buffer = new char[length];
 			std::fill_n(buffer, length, fillchar);
 
 			std::copy(srcstr.begin(), srcstr.end(), buffer);
 			return buffer;
+		}
+
+		/// @brief Combine two path strings into one
+		/// @param p1 First path
+		/// @param p2 Second path
+		/// @return Final combined path
+		string path_join(const std::string &p1, const std::string &p2)
+		{
+			char sep = '/';
+			std::string tmp = p1;
+
+#ifdef _WIN32
+			sep = '\\';
+#endif
+
+			// Add separator if it is not included in the first path:
+			if (p1[p1.length() - 1] != sep)
+			{
+				tmp += sep;
+				return tmp + p2;
+			}
+			else
+			{
+				return p1 + p2;
+			}
+		}
+
+		/// @brief Ensure a relative path exists
+		/// @param rootpath The root path that exists
+		/// @param relpath The new relative path
+		void relative_path_create(string rootpath, string relpath)
+		{
+			char splitchar = '/';
+			std::size_t found = relpath.find("\\");
+			if (found != std::string::npos)
+				splitchar = '\\';
+			std::stringstream test(relpath);
+			std::string segment;
+			std::vector<std::string> seglist;
+			string final_path_str = rootpath;
+			while (std::getline(test, segment, splitchar))
+			{
+				if (segment.length() > 0)
+				{
+					final_path_str = path_join(final_path_str, segment);
+					if (!filesystem::is_directory(final_path_str) || !filesystem::exists(final_path_str))
+					{
+						filesystem::create_directory(final_path_str);
+					}
+				}
+			}
 		}
 	}
 }

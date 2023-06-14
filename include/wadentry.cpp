@@ -29,6 +29,7 @@ namespace wadarchive
 	WadEntry::~WadEntry() {
 		if (file_data != NULL) {
 			free(file_data);
+			file_data = NULL;
 		}
 	}
 }
