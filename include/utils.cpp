@@ -90,14 +90,15 @@ namespace wadarchive
 		/// @brief Get a recursive list of all files in a folder
 		/// @param path The starting folder
 		/// @return The list of files
-		vector<string> ls_recursive(const std::filesystem::path &path)
+		vector<string> ls_recursive(string path)
 		{
 			vector<string> files;
-			for (const auto &p : std::filesystem::recursive_directory_iterator(path))
+			filesystem::path npath(path);
+			for (const auto &p : filesystem::recursive_directory_iterator(npath))
 			{
 				if (!std::filesystem::is_directory(p))
 				{
-					files.push_back(p.path());
+					files.push_back(p.path().generic_string());
 				}
 			}
 			return files;
@@ -179,10 +180,10 @@ namespace wadarchive
 		/// @param p1 First path
 		/// @param p2 Second path
 		/// @return Final combined path
-		string path_join(string &p1, string &p2)
+		string path_join(string p1, string p2)
 		{
 			char sep = '/';
-			std::string tmp = p1;
+			string tmp = p1;
 
 #ifdef _WIN32
 			sep = '\\';

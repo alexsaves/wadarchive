@@ -1,8 +1,11 @@
 #ifndef WARCHIVE_WARCHIVE_H
 #define WARCHIVE_WARCHIVE_H
+
 #include <stdlib.h>
 #include <iostream>
 #include <map>
+#include <vector>
+#include <filesystem>
 
 #include "wadentry.hpp"
 

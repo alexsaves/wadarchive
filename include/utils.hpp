@@ -3,6 +3,8 @@
 
 #include <fstream>
 #include <stdlib.h>
+#include <vector>
+#include <filesystem>
 
 #include "wadentry.hpp"
 
@@ -39,7 +41,7 @@ namespace wadarchive
 		/// @brief Get a recursive list of all files in a folder
 		/// @param path The starting folder
 		/// @return The list of files
-		vector<string> ls_recursive(const std::filesystem::path &path);
+		vector<string> ls_recursive(string path);
 
 		/// @brief Read a file as a character array
 		/// @param path The path to the file
@@ -80,7 +82,7 @@ namespace wadarchive
 		/// @param p1 First path
 		/// @param p2 Second path
 		/// @return Final combined path
-		string path_join(string &p1, string &p2);
+		string path_join(string p1, string p2);
 
 		/// @brief Ensure a relative path exists
 		/// @param rootpath The root path that exists
