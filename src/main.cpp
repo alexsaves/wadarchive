@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
 		filesystem::path dest_path(dest_path_str);
 		int totalfilesize = 0;
 
-		for (int i = 0; i < file_entries.size(); i++)
+		for (int i = 0; i < (int)file_entries.size(); i++)
 		{
 			WadEntry *wad = reader.get_file(file_entries[i]);
 			totalfilesize += wad->size;
