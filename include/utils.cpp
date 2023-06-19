@@ -114,9 +114,10 @@ namespace wadarchive
 			ifstream file(path, ios::in | ios::binary | ios::ate);
 			size = file.tellg();
 			file.seekg(0, ios::beg);
-			buffer = new char[size];
+			buffer = new char[size + 1];
 			file.read(buffer, size);
 			file.close();
+			buffer[size] = '\0';
 			WadEntry *wentry = new WadEntry(path, buffer, size);
 			return wentry;
 		}
@@ -139,10 +140,11 @@ namespace wadarchive
 			ifstream ifs(filename, ios::binary | ios::ate);
 			ifstream::pos_type pos = ifs.tellg();
 			int length = pos;
-			char *pChars = new char[length];
+			char *pChars = new char[length + 1];
 			ifs.seekg(0, ios::beg);
 			ifs.read(pChars, length);
 			ifs.close();
+			pChars[length] = '\0';
 			*read = length;
 			return pChars;
 		}
@@ -155,10 +157,12 @@ namespace wadarchive
 		char *read_file_range(char *filename, int start, int stride)
 		{
 			ifstream ifs(filename, ios::binary | ios::ate);
-			char *pChars = new char[stride];
+			char *pChars = new char[stride + 1];
 			ifs.seekg(start);
 			ifs.read(pChars, stride);
 			ifs.close();
+			// Add null termination
+			pChars[stride] = '\0';
 			return pChars;
 		}
 
