@@ -1,5 +1,5 @@
 # Wadarchive
-Compressed archive library for packaging data in an obscure format. Easily included in any C++ project.
+Archive library for packaging data in an (deliberately) obscure format. Easily included in a C++ project.
 
 # Installation
 
