@@ -104,24 +104,6 @@ namespace wadarchive
 			return files;
 		}
 
-		/// @brief Read a file as a character array
-		/// @param path The path to the file
-		/// @return The character array of the file
-		WadEntry *read_file(string path)
-		{
-			char *buffer;
-			long size;
-			ifstream file(path, ios::in | ios::binary | ios::ate);
-			size = file.tellg();
-			file.seekg(0, ios::beg);
-			buffer = new char[size + 1];
-			file.read(buffer, size);
-			file.close();
-			buffer[size] = '\0';
-			WadEntry *wentry = new WadEntry(path, buffer, size);
-			return wentry;
-		}
-
 		/// @brief Get the size of a file
 		/// @param filename The path to the file
 		/// @return The file size in bytes
@@ -229,6 +211,36 @@ namespace wadarchive
 					}
 				}
 			}
+		}
+
+		/// @brief Read a range of bytes
+		/// @param filename The filename
+		/// @param start Starting point
+		/// @param stride The length
+		/// @return A vector of bytes
+		vector<char> read_file_range_as_vector(char *filename, int start, int stride)
+		{
+			std::ifstream file(filename, std::ios::binary); // Open the file in binary mode
+
+			// Get the size of the file
+			file.seekg(0, std::ios::end);
+			std::streampos fileSize = file.tellg();
+			file.seekg(0, std::ios::beg);
+
+			if (start + stride > fileSize)
+			{
+				stride = (int)fileSize - (int)start;
+			}
+
+			// Move the file pointer to the start position
+			file.seekg(start, std::ios::beg);
+
+			// Read the specified range of bytes into a vector<char>
+			std::vector<char> data(stride);
+			file.read(data.data(), stride);
+
+			// Close the file
+			file.close();
 		}
 	}
 }

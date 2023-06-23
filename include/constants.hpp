@@ -1,5 +1,4 @@
-#ifndef WARCHIVE_CONSTANTS_H
-#define WARCHIVE_CONSTANTS_H
+#pragma once
 
 /**
  * Some high level constants
@@ -16,5 +15,3 @@ namespace wadarchive
 
 	extern const float MIN_READABLE_ENGINE_VERSION;
 }
-
-#endif

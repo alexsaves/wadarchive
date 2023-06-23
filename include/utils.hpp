@@ -1,5 +1,4 @@
-#ifndef WARCHIVE_UTILS_INCLUDE
-#define WARCHIVE_UTILS_INCLUDE
+#pragma once
 
 #include <fstream>
 #include <stdlib.h>
@@ -43,11 +42,6 @@ namespace wadarchive
 		/// @return The list of files
 		vector<string> ls_recursive(string path);
 
-		/// @brief Read a file as a character array
-		/// @param path The path to the file
-		/// @return The character array of the file
-		WadEntry * read_file(string path);
-
 		/// @brief Get the size of a file
 		/// @param filename The path to the file
 		/// @return The file size in bytes
@@ -88,7 +82,12 @@ namespace wadarchive
 		/// @param rootpath The root path that exists
 		/// @param relpath The new relative path
 		void relative_path_create(string rootpath, string relpath);
+
+		/// @brief Read a range of bytes
+		/// @param filename The filename
+		/// @param start Starting point
+		/// @param stride The length
+		/// @return A vector of bytes
+		vector<char> read_file_range_as_vector(char *filename, int start, int stride);
 	}
 }
-
-#endif

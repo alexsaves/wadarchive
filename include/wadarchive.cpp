@@ -115,9 +115,9 @@ namespace wadarchive
 	/// @brief Add a new file entry to the wad
 	/// @param filename The name of the entry
 	/// @param data The data to be written
-	WadEntry *WadArchiveWriter::AddFile(string filename, char *data, int datalen)
+	WadEntry *WadArchiveWriter::AddFile(string filename, vector<char> data)
 	{
-		WadEntry *wad = new WadEntry(filename, NULL, datalen);
+		WadEntry *wad = new WadEntry(filename, data);
 		wad->byte_location = utils::filesize(file_location);
 
 		std::ofstream file(file_location, std::ios::binary | std::ios::app);
@@ -125,12 +125,13 @@ namespace wadarchive
 		if (file.is_open())
 		{
 			// Write the character array to the file
-			file.write(data, datalen);
+			file.write(data.data(), data.size());
 
 			// Close the file
 			file.close();
 		}
 		entries.push_back(wad);
+		wad->free_just_memory();
 		return wad;
 	}
 
@@ -195,7 +196,8 @@ namespace wadarchive
 			string ename = entrydata["name"];
 			int esize = entrydata["size"];
 			int eloc = entrydata["location"];
-			WadEntry *wad = new WadEntry(ename, NULL, esize);
+			WadEntry *wad = new WadEntry();
+			wad->file_name = ename;
 			wad->byte_location = eloc;
 			entry_info.push_back(wad);
 			entry_names.insert(pair<string, WadEntry *>(ename, wad));
@@ -235,13 +237,9 @@ namespace wadarchive
 		newEntry->byte_location = entry->byte_location;
 		newEntry->file_name = entry->file_name;
 		newEntry->size = entry->size;
-		newEntry->file_data = entry->file_data;
-
-		// Get the data
-		if (entry->file_data == NULL)
-		{
-			newEntry->file_data = utils::read_file_range((char *)file_location.c_str(), newEntry->byte_location, newEntry->size);
-		}
+    
+		vector<char> filedata = utils::read_file_range_as_vector((char *)file_location.c_str(), newEntry->byte_location, newEntry->size);
+		newEntry->setData(filedata);
 
 		return newEntry;
 	}

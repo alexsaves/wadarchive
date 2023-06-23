@@ -1,5 +1,4 @@
-#ifndef WARCHIVE_WARCHIVE_H
-#define WARCHIVE_WARCHIVE_H
+#pragma once
 
 #include <stdlib.h>
 #include <iostream>
@@ -27,7 +26,7 @@ namespace wadarchive
 		/// @brief Add a new file entry to the wad
 		/// @param filename The name of the entry
 		/// @param data The data to be written
-		WadEntry *AddFile(string filename, char *data, int datalen);
+		WadEntry *AddFile(string filename, vector<char> data);
 
 		/// @brief Wrap up the file
 		void close();
@@ -88,5 +87,3 @@ namespace wadarchive
 		map<string, WadEntry *> entry_names;
 	};
 }
-
-#endif

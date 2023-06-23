@@ -1,6 +1,9 @@
 #include <iostream>
 #include <stdlib.h>
 #include <filesystem>
+#include <vector>
+#include <iostream>
+#include <fstream>
 
 #include <args.h>
 
@@ -21,11 +24,11 @@ using namespace args;
 int main(int argc, char *argv[])
 {
 	// Set up output boilerplate
-	cout << ENGINE_NAME << " v" << utils::get_double_as_string(ENGINE_VERSION, 2) << endl;
+	cout << wadarchive::ENGINE_NAME << " v" << utils::get_double_as_string(wadarchive::ENGINE_VERSION, 2) << endl;
 
 	args::ArgParser parser;
 	parser.helptext = "Usage to archive a folder: wadarchive -a -s test/testdata -d archive.wad\nUsage to extract a wadfile: wadarchive -x -s archive.wad -d ./";
-	parser.version = utils::get_double_as_string(ENGINE_VERSION, 2);
+	parser.version = utils::get_double_as_string(wadarchive::ENGINE_VERSION, 2);
 	parser.option("dest d", "archive.wad");
 	parser.option("src s");
 	parser.flag("archive a");
@@ -157,7 +160,7 @@ int main(int argc, char *argv[])
 
 			if (file.is_open())
 			{
-				file.write(wad->file_data, wad->size);
+				file.write(wad->getData().data(), wad->size);
 
 				// Close the file
 				file.close();
