@@ -104,6 +104,29 @@ namespace wadarchive
 			return files;
 		}
 
+		/// @brief Read a file as a character array
+		/// @param path The path to the file
+		/// @return The character array of the file
+		WadEntry *read_file(string path)
+		{
+			std::ifstream file(path, std::ios::binary); // Open the binary file
+
+			// Get the size of the file
+			file.seekg(0, std::ios::end);
+			std::streampos fileSize = file.tellg();
+			file.seekg(0, std::ios::beg);
+
+			// Read the file into a vector<char>
+			std::vector<char> data(fileSize);
+			file.read(data.data(), fileSize);
+
+			// Close the file
+			file.close();
+
+			WadEntry *wentry = new WadEntry(path, data);
+			return wentry;
+		}
+
 		/// @brief Get the size of a file
 		/// @param filename The path to the file
 		/// @return The file size in bytes
@@ -241,6 +264,7 @@ namespace wadarchive
 
 			// Close the file
 			file.close();
+			return data;
 		}
 	}
 }

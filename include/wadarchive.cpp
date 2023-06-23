@@ -194,7 +194,7 @@ namespace wadarchive
 		{
 			json entrydata = el.value();
 			string ename = entrydata["name"];
-			int esize = entrydata["size"];
+			//int esize = entrydata["size"];
 			int eloc = entrydata["location"];
 			WadEntry *wad = new WadEntry();
 			wad->file_name = ename;

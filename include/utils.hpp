@@ -42,6 +42,11 @@ namespace wadarchive
 		/// @return The list of files
 		vector<string> ls_recursive(string path);
 
+		/// @brief Read a file as a character array
+		/// @param path The path to the file
+		/// @return The character array of the file
+		WadEntry * read_file(string path);
+
 		/// @brief Get the size of a file
 		/// @param filename The path to the file
 		/// @return The file size in bytes
