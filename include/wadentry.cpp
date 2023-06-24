@@ -43,6 +43,7 @@ namespace wadarchive
 	{
 		empty();
 		file_data = data;
+		size = data.size();
 	}
 
 	/// @brief Zeroes out the data
