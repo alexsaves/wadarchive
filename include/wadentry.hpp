@@ -26,7 +26,6 @@ namespace wadarchive
 		/// @brief Create a new instance with data
 		/// @param fname The name of the file
 		/// @param data The data
-		/// @param filelen The data length
 		WadEntry(string fname, vector<char> data);
 
 		/// @brief Destroy the entry

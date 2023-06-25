@@ -52,7 +52,7 @@ namespace wadarchive
 	/// @brief Destroy the writer
 	WadArchiveWriter::~WadArchiveWriter()
 	{
-		unsigned int entrycount = entries.size();
+		unsigned int entrycount = (unsigned int)entries.size();
 		for (unsigned int i = 0; i < entrycount; i++)
 		{
 			WadEntry *wad = entries[i];
@@ -73,7 +73,7 @@ namespace wadarchive
 
 		json entrylist;
 
-		unsigned int entrycount = entries.size();
+		unsigned int entrycount = (unsigned int)entries.size();
 		for (unsigned int i = 0; i < entrycount; i++)
 		{
 			WadEntry *wad = entries[i];
@@ -218,7 +218,7 @@ namespace wadarchive
 	vector<string> WadArchiveReader::get_entries()
 	{
 		vector<string> out_entries;
-		unsigned int entrycount = entry_info.size();
+		unsigned int entrycount = (unsigned int)entry_info.size();
 		for (unsigned int i = 0; i < entrycount; i++)
 		{
 			WadEntry *wad = entry_info[i];
@@ -238,7 +238,7 @@ namespace wadarchive
 		newEntry->file_name = entry->file_name;
 		newEntry->size = entry->size;
     
-		vector<char> filedata = utils::read_file_range_as_vector((char *)file_location.c_str(), newEntry->byte_location, newEntry->size);
+		vector<char> filedata = utils::read_file_range_as_vector((char *)file_location.c_str(), newEntry->byte_location, (int)newEntry->size);
 		newEntry->setData(filedata);
 
 		return newEntry;

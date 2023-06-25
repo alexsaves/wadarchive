@@ -133,7 +133,7 @@ namespace wadarchive
 		int filesize(string filename)
 		{
 			std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
-			return in.tellg();
+			return (int)in.tellg();
 		}
 
 		/// @brief Read all bytes from a file
@@ -144,7 +144,7 @@ namespace wadarchive
 		{
 			ifstream ifs(filename, ios::binary | ios::ate);
 			ifstream::pos_type pos = ifs.tellg();
-			int length = pos;
+			int length = (int)pos;
 			char *pChars = new char[length + 1];
 			ifs.seekg(0, ios::beg);
 			ifs.read(pChars, length);
