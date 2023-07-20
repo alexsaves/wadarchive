@@ -7,8 +7,8 @@
 
 #include <args.h>
 
-#include "../include/utils.hpp"
-#include "../include/constants.hpp"
+#include "../include/wa_utils.hpp"
+#include "../include/wa_constants.hpp"
 #include "../include/wadarchive.hpp"
 #include "../include/wadentry.hpp"
 
@@ -24,11 +24,11 @@ using namespace args;
 int main(int argc, char *argv[])
 {
 	// Set up output boilerplate
-	cout << wadarchive::ENGINE_NAME << " v" << utils::get_double_as_string(wadarchive::ENGINE_VERSION, 2) << endl;
+	cout << wadarchive::ENGINE_NAME << " v" << wautils::get_double_as_string(wadarchive::ENGINE_VERSION, 2) << endl;
 
 	args::ArgParser parser;
 	parser.helptext = "Usage to archive a folder: wadarchive -a -s test/testdata -d archive.wad\nUsage to extract a wadfile: wadarchive -x -s archive.wad -d ./";
-	parser.version = utils::get_double_as_string(wadarchive::ENGINE_VERSION, 2);
+	parser.version = wautils::get_double_as_string(wadarchive::ENGINE_VERSION, 2);
 	parser.option("dest d", "archive.wad");
 	parser.option("src s");
 	parser.flag("archive a");
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 			cout << "Wadding folder " << source_path_str << "..." << endl;
 
 		// Check if its a simple folder input
-		bool source_is_dir = utils::location_is_folder((char *)source_path_str.c_str());
+		bool source_is_dir = wautils::location_is_folder((char *)source_path_str.c_str());
 
 		if (!source_is_dir)
 		{
@@ -84,12 +84,12 @@ int main(int argc, char *argv[])
 
 		WadArchiveWriter writer(dest_path_str);
 
-		vector<string> file_list = utils::ls_recursive(source_path_str);
+		vector<string> file_list = wautils::ls_recursive(source_path_str);
 		unsigned int match_count = file_list.size();
 		for (unsigned int i = 0; i < match_count; i++)
 		{
 			string full_file_path = string(file_list[i]);
-			WadEntry *entry = utils::read_file(full_file_path);
+			WadEntry *entry = wautils::read_file(full_file_path);
 			string final_dest_file = full_file_path.replace(0, source_path_str.length(), "");
 			if (final_dest_file[0] == '/' || final_dest_file[0] == '\\')
 			{
@@ -109,13 +109,13 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		if (!utils::file_exists(source_path_str))
+		if (!wautils::file_exists(source_path_str))
 		{
 			cout << "Error: WAD not found: " << source_path_str << endl;
 			return EXIT_SUCCESS;
 		}
 
-		if (utils::location_is_file((char *)dest_path_str.c_str()))
+		if (wautils::location_is_file((char *)dest_path_str.c_str()))
 		{
 			cout << "Error: Destination is a file, not a path: " << dest_path_str << endl;
 			return EXIT_SUCCESS;
@@ -148,14 +148,14 @@ int main(int argc, char *argv[])
 			WadEntry *wad = reader.get_file(file_entries[i]);
 			totalfilesize += wad->size;
 			filesystem::path path(file_entries[i]);
-			string final_path_str = utils::path_join(dest_path_str, path.parent_path().generic_string());
+			string final_path_str = wautils::path_join(dest_path_str, path.parent_path().generic_string());
 			if (!filesystem::is_directory(final_path_str) || !filesystem::exists(final_path_str))
 			{
-				utils::relative_path_create(dest_path_str, path.parent_path().generic_string());
+				wautils::relative_path_create(dest_path_str, path.parent_path().generic_string());
 			}
 
 			// Write the file
-			string final_file_path_str = utils::path_join(dest_path_str, file_entries[i]);
+			string final_file_path_str = wautils::path_join(dest_path_str, file_entries[i]);
 			std::ofstream file(final_file_path_str, std::ios::binary);
 
 			if (file.is_open())

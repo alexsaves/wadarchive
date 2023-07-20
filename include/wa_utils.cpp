@@ -1,4 +1,4 @@
-#include "utils.hpp"
+#include "wa_utils.hpp"
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -16,7 +16,7 @@ namespace fs = std::filesystem;
 
 namespace wadarchive
 {
-	namespace utils
+	namespace wautils
 	{
 		/// @brief Check if a file exists
 		/// @param name Location of the file

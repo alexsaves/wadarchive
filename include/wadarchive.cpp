@@ -1,8 +1,8 @@
 #include "wadarchive.hpp"
 #include "wadentry.hpp"
 
-#include "utils.hpp"
-#include "constants.hpp"
+#include "wa_utils.hpp"
+#include "wa_constants.hpp"
 
 #include <stdlib.h>
 #include <cstdio>
@@ -26,7 +26,7 @@ namespace wadarchive
 		format_version = ENGINE_VERSION;
 
 		// Check if the file exists
-		if (utils::file_exists(file_location))
+		if (wautils::file_exists(file_location))
 		{
 			// delete the file
 			remove(file_location.c_str());
@@ -36,11 +36,11 @@ namespace wadarchive
 		if (file.is_open())
 		{
 			// Write the character array to the file
-			char *sigbuffer = utils::write_fixed_length_string(ENGINE_NAME, FRONT_BUFFER_LENGTH, ' ');
+			char *sigbuffer = wautils::write_fixed_length_string(ENGINE_NAME, FRONT_BUFFER_LENGTH, ' ');
 			file.write(sigbuffer, FRONT_BUFFER_LENGTH);
 			free(sigbuffer);
 
-			char *sigverbuffer = utils::write_fixed_length_string(utils::get_double_as_string(ENGINE_VERSION, 2), FRONT_BUFFER_LENGTH, ' ');
+			char *sigverbuffer = wautils::write_fixed_length_string(wautils::get_double_as_string(ENGINE_VERSION, 2), FRONT_BUFFER_LENGTH, ' ');
 			file.write(sigverbuffer, FRONT_BUFFER_LENGTH);
 			free(sigverbuffer);
 
@@ -64,7 +64,7 @@ namespace wadarchive
 	void WadArchiveWriter::close()
 	{
 		// Write the json blob
-		int jsonlocation = utils::filesize(file_location);
+		int jsonlocation = wautils::filesize(file_location);
 
 		json j;
 
@@ -92,7 +92,7 @@ namespace wadarchive
 		std::copy(s.begin(), s.end(), buffer);
 
 		// Dump the json location to a buffer
-		string jsonlocationstr = utils::get_int_string(jsonlocation);
+		string jsonlocationstr = wautils::get_int_string(jsonlocation);
 		const int locbuffersize = SUFFIX_BUFFER_LENGTH;
 		char locbuffer[locbuffersize];
 		char fillChar = ' ';
@@ -118,7 +118,7 @@ namespace wadarchive
 	WadEntry *WadArchiveWriter::AddFile(string filename, vector<char> data)
 	{
 		WadEntry *wad = new WadEntry(filename, data);
-		wad->byte_location = utils::filesize(file_location);
+		wad->byte_location = wautils::filesize(file_location);
 
 		std::ofstream file(file_location, std::ios::binary | std::ios::app);
 
@@ -148,10 +148,10 @@ namespace wadarchive
 	bool WadArchiveReader::init()
 	{
 		// Get file length
-		int file_length = utils::filesize(file_location);
+		int file_length = wautils::filesize(file_location);
 
 		// Read the file signature
-		char *sigstrchar = utils::read_file_range((char *)file_location.c_str(), 0, FRONT_BUFFER_LENGTH);
+		char *sigstrchar = wautils::read_file_range((char *)file_location.c_str(), 0, FRONT_BUFFER_LENGTH);
 		string sigstrc = string(sigstrchar);
 		free(sigstrchar);
 
@@ -161,7 +161,7 @@ namespace wadarchive
 			return false;
 		}
 
-		char *verstrchar = utils::read_file_range((char *)file_location.c_str(), FRONT_BUFFER_LENGTH, FRONT_BUFFER_LENGTH);
+		char *verstrchar = wautils::read_file_range((char *)file_location.c_str(), FRONT_BUFFER_LENGTH, FRONT_BUFFER_LENGTH);
 		string verstrc = string(verstrchar);
 		free(verstrchar);
 		format_version = stof(verstrc);
@@ -173,10 +173,10 @@ namespace wadarchive
 		}
 
 		// Read the footer and JSON data
-		char *jsonposstrchar = utils::read_file_range((char *)file_location.c_str(), file_length - SUFFIX_BUFFER_LENGTH, SUFFIX_BUFFER_LENGTH);
+		char *jsonposstrchar = wautils::read_file_range((char *)file_location.c_str(), file_length - SUFFIX_BUFFER_LENGTH, SUFFIX_BUFFER_LENGTH);
 		int jsonpos = stoi(string(jsonposstrchar));
 		free(jsonposstrchar);
-		char *jsonchardata = utils::read_file_range((char *)file_location.c_str(), jsonpos, file_length - SUFFIX_BUFFER_LENGTH - jsonpos);
+		char *jsonchardata = wautils::read_file_range((char *)file_location.c_str(), jsonpos, file_length - SUFFIX_BUFFER_LENGTH - jsonpos);
 		json filedata = json::parse(jsonchardata);
 		free(jsonchardata);
 
@@ -238,7 +238,7 @@ namespace wadarchive
 		newEntry->file_name = entry->file_name;
 		newEntry->size = entry->size;
     
-		vector<char> filedata = utils::read_file_range_as_vector((char *)file_location.c_str(), newEntry->byte_location, (int)newEntry->size);
+		vector<char> filedata = wautils::read_file_range_as_vector((char *)file_location.c_str(), newEntry->byte_location, (int)newEntry->size);
 		newEntry->setData(filedata);
 
 		return newEntry;

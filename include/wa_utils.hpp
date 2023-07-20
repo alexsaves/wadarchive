@@ -14,7 +14,7 @@ using namespace std;
  */
 namespace wadarchive
 {
-	namespace utils
+	namespace wautils
 	{
 		/// @brief Check if a file exists
 		/// @param name Location of the file

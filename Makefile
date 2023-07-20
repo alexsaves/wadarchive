@@ -7,7 +7,7 @@ LIB_SRC_FILES = $(wildcard $(INCLUDE_SRC_DIR)/*.cpp)
 SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(INCLUDE_SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*/*.cpp) static/argspp/src/args.cpp
 LIB_INCLUDE_PATHS = -I static/json/include
 INCLUDE_PATHS = -I static/json/include -I static/argspp/src
-COMPILER_FLAGS = -std=c++20 -Wall -O0 -Wno-deprecated -Wsign-compare
+COMPILER_FLAGS = -std=c++20 -Wall -O3 -Wsign-compare -Wuninitialized -Wmissing-field-initializers -Wextra -Werror -Winit-self
 LIBRARY_PATHS = 
 LINKER_FLAGS = 
 DEBUG_FLAG = -g
