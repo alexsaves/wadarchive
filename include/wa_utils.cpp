@@ -1,7 +1,6 @@
 #include "wa_utils.hpp"
 
 #include <stdlib.h>
-#include <unistd.h>
 #include <iomanip>
 #include <sstream>
 #include <fstream>
@@ -23,7 +22,8 @@ namespace wadarchive
 		/// @return Whether or not the file exists
 		bool file_exists(const string &name)
 		{
-			return (access(name.c_str(), F_OK) != -1);
+			std::ifstream file(name);
+			return file.good();
 		}
 
 		/// @brief Get a floating point number as a string

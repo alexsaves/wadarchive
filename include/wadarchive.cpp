@@ -88,13 +88,14 @@ namespace wadarchive
 
 		// Dump the json to a char array
 		string s = j.dump();
-		char buffer[s.length()];
+		//char buffer[s.length()];
+		char* buffer = new char[s.size()];
 		std::copy(s.begin(), s.end(), buffer);
 
 		// Dump the json location to a buffer
 		string jsonlocationstr = wautils::get_int_string(jsonlocation);
 		const int locbuffersize = SUFFIX_BUFFER_LENGTH;
-		char locbuffer[locbuffersize];
+		char* locbuffer = new char[locbuffersize];
 		char fillChar = ' ';
 		std::fill_n(locbuffer, locbuffersize, fillChar);
 		std::copy(jsonlocationstr.begin(), jsonlocationstr.end(), locbuffer);
@@ -110,6 +111,8 @@ namespace wadarchive
 			// Close the file
 			file.close();
 		}
+		delete buffer;
+		delete locbuffer;
 	}
 
 	/// @brief Add a new file entry to the wad
