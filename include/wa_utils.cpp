@@ -117,7 +117,7 @@ namespace wadarchive
 			file.seekg(0, std::ios::beg);
 
 			// Read the file into a vector<char>
-			std::vector<char> data(fileSize);
+			std::vector<char> data(static_cast<std::size_t>(fileSize));
 			file.read(data.data(), fileSize);
 
 			// Close the file

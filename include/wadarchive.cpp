@@ -23,7 +23,7 @@ namespace wadarchive
 	WadArchiveWriter::WadArchiveWriter(string destination_file)
 	{
 		file_location = destination_file;
-		format_version = WA_ENGINE_VERSION;
+		format_version = (float)WA_ENGINE_VERSION;
 
 		// Check if the file exists
 		if (wautils::file_exists(file_location))
@@ -143,7 +143,7 @@ namespace wadarchive
 	WadArchiveReader::WadArchiveReader(string source_wad_file)
 	{
 		file_location = source_wad_file;
-		format_version = WA_ENGINE_VERSION;
+		format_version = (float)WA_ENGINE_VERSION;
 	}
 
 	/// @brief Initialize the reader with the file

@@ -5,7 +5,7 @@
  */
 namespace wadarchive
 {
-    extern const float WA_ENGINE_VERSION;
+    extern const double WA_ENGINE_VERSION;
     extern const char *WA_ENGINE_NAME;
     extern const char *WA_COPYRIGHT_STATEMENT;
     extern const char *WA_LICENSE_STATEMENT;
@@ -13,5 +13,5 @@ namespace wadarchive
 	extern const int FRONT_BUFFER_LENGTH;
 	extern const int SUFFIX_BUFFER_LENGTH;
 
-	extern const float MIN_READABLE_ENGINE_VERSION;
+	extern const double MIN_READABLE_ENGINE_VERSION;
 }
