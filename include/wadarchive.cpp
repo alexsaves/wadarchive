@@ -23,7 +23,7 @@ namespace wadarchive
 	WadArchiveWriter::WadArchiveWriter(string destination_file)
 	{
 		file_location = destination_file;
-		format_version = ENGINE_VERSION;
+		format_version = WA_ENGINE_VERSION;
 
 		// Check if the file exists
 		if (wautils::file_exists(file_location))
@@ -36,11 +36,11 @@ namespace wadarchive
 		if (file.is_open())
 		{
 			// Write the character array to the file
-			char *sigbuffer = wautils::write_fixed_length_string(ENGINE_NAME, FRONT_BUFFER_LENGTH, ' ');
+			char *sigbuffer = wautils::write_fixed_length_string(WA_ENGINE_NAME, FRONT_BUFFER_LENGTH, ' ');
 			file.write(sigbuffer, FRONT_BUFFER_LENGTH);
 			free(sigbuffer);
 
-			char *sigverbuffer = wautils::write_fixed_length_string(wautils::get_double_as_string(ENGINE_VERSION, 2), FRONT_BUFFER_LENGTH, ' ');
+			char *sigverbuffer = wautils::write_fixed_length_string(wautils::get_double_as_string(WA_ENGINE_VERSION, 2), FRONT_BUFFER_LENGTH, ' ');
 			file.write(sigverbuffer, FRONT_BUFFER_LENGTH);
 			free(sigverbuffer);
 
@@ -68,8 +68,8 @@ namespace wadarchive
 
 		json j;
 
-		j["engine"] = ENGINE_NAME;
-		j["engine_ver"] = ENGINE_VERSION;
+		j["engine"] = WA_ENGINE_NAME;
+		j["engine_ver"] = WA_ENGINE_VERSION;
 
 		json entrylist;
 
@@ -111,8 +111,8 @@ namespace wadarchive
 			// Close the file
 			file.close();
 		}
-		delete buffer;
-		delete locbuffer;
+		delete[] buffer;
+		delete[] locbuffer;
 	}
 
 	/// @brief Add a new file entry to the wad
@@ -143,7 +143,7 @@ namespace wadarchive
 	WadArchiveReader::WadArchiveReader(string source_wad_file)
 	{
 		file_location = source_wad_file;
-		format_version = ENGINE_VERSION;
+		format_version = WA_ENGINE_VERSION;
 	}
 
 	/// @brief Initialize the reader with the file
@@ -158,7 +158,7 @@ namespace wadarchive
 		string sigstrc = string(sigstrchar);
 		free(sigstrchar);
 
-		if (!sigstrc.starts_with(ENGINE_NAME))
+		if (!sigstrc.starts_with(WA_ENGINE_NAME))
 		{
 			// Fails sig check
 			return false;
@@ -184,7 +184,7 @@ namespace wadarchive
 		free(jsonchardata);
 
 		// iterate over the entries
-		if (filedata["engine"] != ENGINE_NAME)
+		if (filedata["engine"] != WA_ENGINE_NAME)
 		{
 			return false;
 		}

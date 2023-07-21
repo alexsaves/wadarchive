@@ -24,11 +24,11 @@ using namespace args;
 int main(int argc, char *argv[])
 {
 	// Set up output boilerplate
-	cout << wadarchive::ENGINE_NAME << " v" << wautils::get_double_as_string(wadarchive::ENGINE_VERSION, 2) << endl;
+	cout << wadarchive::WA_ENGINE_NAME << " v" << wautils::get_double_as_string(wadarchive::WA_ENGINE_VERSION, 2) << endl;
 
 	args::ArgParser parser;
 	parser.helptext = "Usage to archive a folder: wadarchive -a -s test/testdata -d archive.wad\nUsage to extract a wadfile: wadarchive -x -s archive.wad -d ./";
-	parser.version = wautils::get_double_as_string(wadarchive::ENGINE_VERSION, 2);
+	parser.version = wautils::get_double_as_string(wadarchive::WA_ENGINE_VERSION, 2);
 	parser.option("dest d", "archive.wad");
 	parser.option("src s");
 	parser.flag("archive a");
